@@ -11,14 +11,24 @@ async def main():
         await page.goto(power_bi_url)
 
         await page.screenshot(path="example.png")
-        selector = "#pvExplorationHost > div > div > exploration > div > explore-canvas > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToPage > div.visualContainerHost > visual-container-repeat > visual-container:nth-child(8) > transform > div > div.visualContent > div > visual-modern > div > div > div.tableEx"
+        selector = "visual-container.visual-container-component:nth-child(8) > transform:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > visual-modern:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(4)"
         
         await page.hover(selector)
         # iframe = page.locator(selector)
-        await page.mouse.wheel(5000,0)
-        await page.mouse.wheel(0,5000)
 
-        print(await page.inner_html(selector))
+        html = str(await page.inner_html(selector))
+        dados_antigos = html
+        await page.mouse.wheel(5000,0) #scroll vertical
+        while(1):
+            await page.mouse.wheel(0,500)
+
+            dados_novos = str(await page.inner_html(selector)) 
+            html += dados_novos
+            if(dados_novos != dados_antigos):
+                dados_antigos = dados_novos
+            else:
+                break
+        print(html)
 
         await browser.close()
 
