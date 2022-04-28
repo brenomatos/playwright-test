@@ -11,8 +11,15 @@ async def main():
         await page.goto(power_bi_url)
 
         await page.screenshot(path="example.png")
-        selector = "visual-container.visual-container-component:nth-child(8) > transform:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > visual-modern:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(4)"
+
+        # salva apenas a tabela, mas as vezes nao executa (e nunca executa ate o fim)
+        # selector = "visual-container.visual-container-component:nth-child(8) > transform:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > visual-modern:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(4)"
         
+        # esse aqui salva varias tabelas em sequencia
+        selector = "visual-container.visual-container-component:nth-child(8) > transform:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > visual-modern:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+
+        # selector que imita o do elves
+        # selector = "visual-container.visual-container-component:nth-child(8) > transform:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > visual-modern:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(4)"
         await page.hover(selector)
         # iframe = page.locator(selector)
 
@@ -20,7 +27,7 @@ async def main():
         dados_antigos = html
         await page.mouse.wheel(5000,0) #scroll vertical
         while(1):
-            await page.mouse.wheel(0,500)
+            await page.mouse.wheel(0,100)
 
             dados_novos = str(await page.inner_html(selector)) 
             html += dados_novos
